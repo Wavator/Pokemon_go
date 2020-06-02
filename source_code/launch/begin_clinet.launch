@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="pokemon_go" name="pokemon_tb3_0" type="pokemon_searching0" />
+  <node pkg="pokemon_go" name="pokemon_tb3_1" type="pokemon_searching1" />
+  <node pkg="pokemon_go" name="pokemon_tb3_2" type="pokemon_searching2" />	
+</launch>

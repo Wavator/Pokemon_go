@@ -1,0 +1,90 @@
+<launch>
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="world_file" default="$(find pokemon_go)/worlds/pokemon_maze/worlds/pokemon.world"/>
+  <arg name="open_rviz" default="true"/>
+  <arg name="first_tb3"  default="tb3_0"/>
+  <arg name="second_tb3" default="tb3_1"/>
+  <arg name="third_tb3"  default="tb3_2"/>
+  <arg name="map_file" default="$(find pokemon_go)/map/pokemap.yaml"/>
+
+  <arg name="first_tb3_x_pos" default="-1.0"/>
+  <arg name="first_tb3_y_pos" default="-1.0"/>
+  <arg name="first_tb3_z_pos" default=" 0.0"/>
+  <arg name="first_tb3_yaw"   default=" 3.14"/>
+
+  <arg name="second_tb3_x_pos" default=" -3.0"/>
+  <arg name="second_tb3_y_pos" default=" 2.0"/>
+  <arg name="second_tb3_z_pos" default=" 0.0"/>
+  <arg name="second_tb3_yaw"   default=" -1.57"/>
+
+  <arg name="third_tb3_x_pos" default=" 3.0"/>
+  <arg name="third_tb3_y_pos" default=" 2.0"/>
+  <arg name="third_tb3_z_pos" default=" 0.0"/>
+  <arg name="third_tb3_yaw"   default=" 3.14"/>
+
+<!-- Arguments -->
+
+  <group ns = "$(arg first_tb3)">
+     <!-- Map server -->
+     <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>   
+
+      <!-- AMCL -->
+      <include file="$(find pokemon_go)/launch/amcl.launch">
+        <arg name="initial_pose_x" value="$(arg first_tb3_x_pos)"/>
+        <arg name="initial_pose_y" value="$(arg first_tb3_y_pos)"/>
+        <arg name="initial_pose_a" value="$(arg first_tb3_yaw)"/>
+        <arg name="tf_prefix"      value="$(arg first_tb3)"/>
+      </include>
+
+      <!-- move_base -->
+      <include file="$(find pokemon_go)/launch/move_base.launch">
+        <arg name="multi_name" value="$(arg first_tb3)"/>
+      </include>
+  </group>
+  
+  <group ns = "$(arg second_tb3)">
+     <!-- Map server -->
+     <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>   
+
+      <!-- AMCL -->
+      <include file="$(find pokemon_go)/launch/amcl.launch">
+        <arg name="initial_pose_x" value="$(arg second_tb3_x_pos)"/>
+        <arg name="initial_pose_y" value="$(arg second_tb3_y_pos)"/>
+        <arg name="initial_pose_a" value="$(arg second_tb3_yaw)"/>
+        <arg name="tf_prefix"      value="$(arg second_tb3)"/>
+      </include>
+
+      <!-- move_base -->
+      <include file="$(find pokemon_go)/launch/move_base.launch">
+        <arg name="multi_name" value="$(arg second_tb3)"/>
+      </include>
+  </group>
+  
+  <group ns = "$(arg third_tb3)">
+     <!-- Map server -->
+     <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>   
+
+      <!-- AMCL -->
+      <include file="$(find pokemon_go)/launch/amcl.launch">
+        <arg name="initial_pose_x" value="$(arg third_tb3_x_pos)"/>
+        <arg name="initial_pose_y" value="$(arg third_tb3_y_pos)"/>
+        <arg name="initial_pose_a" value="$(arg third_tb3_yaw)"/>
+        <arg name="tf_prefix"      value="$(arg third_tb3)"/>
+      </include>
+
+      <!-- move_base -->
+      <include file="$(find pokemon_go)/launch/move_base.launch">
+        <arg name="multi_name" value="$(arg third_tb3)"/>
+      </include>
+  </group>
+
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find pokemon_go)/rviz/multi_turtlebot3_navigation.rviz"/>
+  </group>
+
+
+
+</launch>
